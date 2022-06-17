@@ -1,0 +1,50 @@
+{% extends "spacetypes.html" %}
+
+{%block add_modal %}
+ <!-- Add Modal -->
+ <div class="modal" id="add_spacetype_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Spacetype</h5>
+        </div>
+
+        <div class="modal-body">
+          <form id="add_new_spacetype" action="/add_new_spacetype" method="post" novalidate>
+
+            <div class="mb-3">
+                <label for="spacetype_name" class="col-form-label">Name:</label>
+                <input type="text" class="form-control" id="name" name="spacetype_name" required maxlength="255">
+                <span class="error" aria-live="polite"></span>
+              </div>
+
+            <div class="mb-3">
+                <label for="spacetype_description" class="col-form-label">Spacetype Description:</label>
+                <input type="text" class="form-control" name="spacetype_description" maxlength="255">
+            </div>
+
+            <div class="mb-3">
+                <label for="spacetype_max_occupancy" class="col-form-label">Spacetype Max Occupancy:</label>
+                <input type="number" class="form-control" name="spacetype_max_occupancy">
+            </div>
+
+            <div class="modal-footer">
+                <a href="spacetypes" class="btn btn-secondary">Close</a>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{%endblock%}
+
+{% block add_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#add_spacetype_modal").modal("show")
+    })
+</script>
+{%endblock%}

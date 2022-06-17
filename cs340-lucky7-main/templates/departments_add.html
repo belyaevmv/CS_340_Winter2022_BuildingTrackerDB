@@ -1,0 +1,69 @@
+{% extends "departments.html" %}
+
+{%block add_modal %}
+ <!-- Add Modal -->
+ <div class="modal" id="add_department_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Department</h5>
+        </div>
+
+        <div class="modal-body">
+          <form id="add_new_department" action="/add_new_department" method="post" novalidate>
+
+            <input type="text" hidden id="department_id" value = "None">
+            <div class="mb-3">
+                <label for="department_name" class="col-form-label">Department Name:</label>
+                <input type="text" class="form-control" id="name" name="department_name" required maxlength="250">
+                <span class="error" aria-live="polite"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="department_chair_name" class="col-form-label">Department Chair Name:</label>
+                <input type="text" class="form-control" id="chairName" name="department_chair_name" required maxlength="250">
+                <span class="error" aria-live="polite"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label for="department_contact_num" class="col-form-label">Department Contact Number:</label>
+                <input type="tel" class="form-control" id="phone" name="department_contact_num" placeholder="0123456789" required pattern="[0-9]{10}" minlength="10">
+                <span class="error" aria-live="polite"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label for="department_contact_email" class="col-form-label">Department Contact Email:</label>
+                <input type="email" class="form-control" id="email" name="department_contact_email" required maxlength="250">
+                <span class="error" aria-live="polite"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="department_current_size" class="col-form-label">Department Current Size:</label>
+                <input type="number" class="form-control" name="department_current_size">
+            </div>
+
+            <div class="mb-3">
+                <label for="department_projected_size" class="col-form-label">Department Projected Size:</label>
+                <input type="number" class="form-control" name="department_projected_size">
+            </div>
+
+            <div class="modal-footer">
+                <a href="departments" class="btn btn-secondary">Close</a>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{%endblock%}
+
+{% block add_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#add_department_modal").modal("show")
+    })
+</script>
+{%endblock%}

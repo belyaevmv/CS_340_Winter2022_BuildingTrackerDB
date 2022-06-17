@@ -1,0 +1,69 @@
+{% extends "departments.html" %}
+
+{%block edit_modal %}
+ <!-- edit Modal -->
+ <div class="modal" id="edit_department_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Department</h5>
+        </div>
+        <div class="modal-body">
+          <form id="edit_department" action="/edit_department/{{department_to_edit['department_id']}}" method="post" novalidate>
+
+            <input type="text" hidden id="department_id" value = "{{department_to_edit['department_id']}}">
+          <div class="mb-3">
+              <label for="edit_department_name" class="col-form-label">Department Name:</label>
+              <input type="text" class="form-control" id="name" name="edit_department_name" value = "{{department_to_edit['department_name']}}" required maxlength="250">
+              <span class="error" aria-live="polite"></span>
+            </div>
+
+          <div class="mb-3">
+              <label for="edit_department_chair_name" class="col-form-label">Department Chair Name:</label>
+              <input type="text" class="form-control" id="chairName" name="edit_department_chair_name" value = "{{department_to_edit['department_chair_name']}}" required maxlength="250">
+              <span class="error" aria-live="polite"></span>
+            </div>
+
+          <div class="mb-3">
+            <label for="edit_department_contact_num" class="col-form-label">Department Phone:</label>
+            <input type="text" class="form-control" id="phone" name="edit_department_contact_num" value = "{{department_to_edit['department_contact_num']}}" required pattern="[0-9]{10}" minlength="10">
+            <span class="error" aria-live="polite"></span>
+          </div>
+
+          <div class="mb-3">
+            <label for="edit_department_contact_email" class="col-form-label">Department Email:</label>
+            <input type="email" class="form-control" id="email" name="edit_department_contact_email" value = "{{department_to_edit['department_contact_email']}}"required maxlength="250">
+            <span class="error" aria-live="polite"></span>
+          </div>
+
+          <div class="mb-3">
+            <label for="edit_current_dept_size" class="col-form-label">Current Head Count:</label>
+            <input type="number" class="form-control" name="edit_current_dept_size" value = "{{department_to_edit['current_dept_size']}}">
+          </div>
+
+          <div class="mb-3">
+            <label for="edit_projected_dept_size" class="col-form-label">Current Head Count:</label>
+            <input type="number" class="form-control" name="edit_projected_dept_size" value = "{{department_to_edit['projected_dept_size']}}">
+          </div>
+
+          
+        </div>
+        <div class="modal-footer">
+          <a href="/departments" class="btn btn-secondary">Close</a>
+          <button type="submit" class="btn btn-primary" >Submit</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+
+{%endblock%}
+
+{% block edit_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#edit_department_modal").modal("show")
+    })
+</script>
+{%endblock%}

@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %} Accessories {% endblock%}
+
+{% block tablename %} 
+    <div class="table-head"></div>
+        <span class="tablename"> 
+            <h2>Accessories</h2>
+        </span>
+
+        <span class="header_buttons" >
+          <a href="{{url_for('add_new_accessory')}}" class="btn btn-success">
+              Add New Accessory
+          </a>
+      </span>
+    </div>
+{% endblock %}
+
+{% block table %}
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Accessory Name</th>
+    <th>Accessory Description</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+  {% for row in data %}    
+      <tr>
+          {% for cell in row %}
+          <td>{{row[cell]}}</td>
+          {% endfor %}
+          
+          <td>
+              <button type="button" class="button" onclick="window.location ='/edit_accessory/{{row['accessory_id']}}'" >
+                  <i class="fa-solid fa-pen"></i>
+              </button>
+              
+              <button type="button" class="button" onclick="window.location ='/delete_accessory/{{row['accessory_id']}}'">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+          </td>
+      </tr> 
+  {% endfor %}
+</table> 
+{%endblock%}
+
+
+{% block add_modal %}{% endblock %}
+{% block add_script %}{% endblock %}
+
+{% block form_validation%}
+        <!-- Script for form validation-->
+        <script>
+
+          // There are many ways to pick a DOM node; here we get the form itself and the email
+          // input box, as well as the span element into which we will place the error message.
+          const form  = document.getElementsByTagName('form')[0];
+          const rows = document.getElementsByTagName('tr');
+          const id = document.getElementById('accessory_id')
+
+          const name = document.getElementById('name');
+          const nameError = document.querySelector('#name + span.error');
+          var formValidity = true
+
+          name.addEventListener('input', function (event) {
+            if (name.validity.valid) {
+              nameError.textContent = ''; // Reset the content of the message
+              nameError.className = 'error'; // Reset the visual state of the message
+            } else {
+              showNameError();
+            }
+          });
+
+          
+          form.addEventListener('submit', function (event) {
+            if(!name.validity.valid) {
+              // If it isn't, we display an appropriate error message
+              showNameError();
+              formValidity = false
+            } 
+
+            for (const r of rows){
+              console.log(r.cells[0])
+              console.log(id.value)
+              if (r.cells[1].innerText === name.value)  {
+                if (id.value === 'None') {
+                nameError.textContent = 'Accessory with this name already exists. Provide new accessory name.';
+                nameError.className = 'error active';
+                formValidity = false
+                break;
+                } else if (r.cells[0].innerText !== id.value) {
+                  nameError.textContent = 'Accessory with this name already exists. Provide new accessory name.';
+                  nameError.className = 'error active';
+                  formValidity = false
+                  break;
+                } 
+              }
+            }
+
+          console.log(formValidity)
+            if (formValidity === false ){
+              event.preventDefault();
+              formValidity = true
+            }
+          });
+          
+
+          function showNameError() {
+            if(name.validity.valueMissing) {
+              nameError.textContent = 'Accessory Name is a required field';
+            } 
+            // Set the styling appropriately
+            nameError.className = 'error active';
+          }
+    
+          </script>
+
+{%endblock%}

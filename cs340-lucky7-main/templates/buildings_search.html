@@ -1,0 +1,118 @@
+{% extends "buildings.html" %}
+ <!-- search Modal -->
+
+ {%block search_modal %}
+ <div class="modal" id="search_building_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+     <div class="modal-dialog">
+       <div class="modal-content">
+ 
+         <div class="modal-header">
+           <h5 class="modal-title" id="exampleModalLabel">Search Buidlings</h5>
+           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         
+         <div class="modal-body">
+           <form id="search_buildings" action="/search_buildings" method="post">
+             <div class="mb-3">
+               <label for="search-building-name" class="col-form-label">Building Name:</label>
+ 
+               <!-- <div class="input-group mb-3">
+                 <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                 <select class="form-select" id="rule_b_name" name="rule_b_name">
+                   <option selected>Choose...</option>
+                   <option value="==">Equal</option>
+                   <option value="$">Contains</option>
+                   <option value="^">Begins with</option>
+                 </select>
+               </div> -->
+ 
+               <input type="text" class="form-control" name="search_b_name">
+             </div>
+ 
+ 
+             <div class="mb-3">
+               <label for="search-building-address-number" class="col-form-label">Street Number:</label>
+ 
+               <!-- <div class="input-group mb-3">
+                 <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                 <select class="form-select" id="rule_b_address_number" name="rule_b_address_number">
+                   <option selected>Choose...</option>
+                   <option value="==">Equal</option>
+                   <option value="$">Contains</option>
+                   <option value="^">Begins with</option>
+                 </select>
+               </div> -->
+ 
+               <input type="text" class="form-control" name="search_b_address_number">
+             </div>
+ 
+ 
+             <div class="mb-3">
+               <label for="search-building-address-street" class="col-form-label">Street Name:</label>
+ 
+               <!-- <div class="input-group mb-3">
+                 <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                 <select class="form-select" id="rule_b_address_street" name="rule_b_address_street">
+                   <option selected>Choose...</option>
+                   <option value="==">Equal</option>
+                   <option value="$">Contains</option>
+                   <option value="^">Begins with</option>
+                 </select>
+               </div> -->
+ 
+               <input type="text" class="form-control" name="search_b_address_street">
+             </div>
+ 
+ 
+             <div class="mb-3">
+               <label for="search-building-address-state" class="col-form-label">State:</label>
+               <input type="text" class="form-control" name="search_b_address_state">
+             </div>
+ 
+ 
+             <div class="mb-3">
+               <label for="building-address-zip" class="col-form-label">Zip Code:</label>
+               <input type="number" class="form-control" name="search_b_address_zip">
+             </div>
+ 
+ 
+             <!-- <div class="mb-3">
+               <label for="building-gross-sf" class="col-form-label">Gross Square Feet:</label>
+ 
+               <div class="input-group mb-3">
+                 <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                 <select class="form-select" id="rule_b_gross_sf" name="rule_b_gross_sf">
+                   <option selected>Choose...</option>
+                   <option value="equals">Equals</option>
+                   <option value="lessthen">Less then</option>
+                   <option value="lessthenequal">Less then or Equal to</option>
+                   <option value="greaterthen">Greater then</option>
+                   <option value="greaterthenequal">Greater then or equal to</option>
+                 </select>
+               </div>
+ 
+               <input type="number" class="form-control" name="search_b_gross_sf">
+             </div> -->
+           <!-- </form> -->
+         <!-- </div> -->
+ 
+ 
+         <div class="modal-footer">
+           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="{{ url_for('static', filename='app.css')}}">Close</button>
+           <button type="submit" class="btn btn-primary" >Submit</button>
+         </div>
+         
+         </form>
+       </div>
+     </div>
+ </div>
+ {%endblock%}
+ 
+ {% block search_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#search_building_modal").modal("show")
+    })
+</script>
+{%endblock%}

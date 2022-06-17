@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %} Room Accessories {% endblock%}
+
+{% block tablename %} 
+    <div class="table-head"></div>
+    <span class="tablename"> 
+        <h2>Accessories in Rooms</h2>
+    </span>
+    <span class="header_buttons">
+        <a href="{{url_for('add_new_room_accessory')}}" class="btn btn-success">
+                Add New Room Accessory
+        </a>
+    </span>
+    </div>
+{% endblock %}
+
+
+{% block table %}
+<table>
+    <tr>
+        <th>Building Name</th>
+        <th>Floor Name</th>
+        <th>Room Number</th>
+        <th>SpaceType Name</th>
+        <th>Accessory Name</th>
+        <th>Accessory Quantity</th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    {% for row in data %}    
+      <tr>
+          {% for cell in row %}
+                {% if cell != 'room_accessory_id' %}
+                    <td>{{row[cell]}}</td>
+                {% endif %}
+          {% endfor %}
+          
+          <td>
+              <button type="button" class="button" onclick="window.location ='/edit_room_accessory/{{row['room_accessory_id']}}'">
+                  <i class="fa-solid fa-pen"></i>
+              </button>
+              
+              <button type="button" class="button" onclick="window.location ='/delete_room_accessory/{{row['room_accessory_id']}}'">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+          </td>
+      </tr> 
+    {% endfor %}
+</table> 
+
+{%endblock%}
+
+
+
+{% block form_validation%}
+        <!-- Script for form validation-->
+        <script>
+          const form  = document.getElementsByTagName('form')[0];
+
+          const accessory = document.getElementById('accessory_id');
+          const accessoryError = document.querySelector('#accessory_id + span.error');
+
+          const room = document.getElementById('room_id');
+          const roomError = document.querySelector('#room_id + span.error');
+
+          var formValidity = true
+
+          accessory.addEventListener('input', function (event) {
+            if (accessory.validity.valid) {
+              accessoryError.textContent = ''; // Reset the content of the message
+              accessoryError.className = 'error'; // Reset the visual state of the message
+            } else {
+              showAccessoryError();
+            }
+          });
+
+          room.addEventListener('input', function (event) {
+            if (room.validity.valid) {
+              roomError.textContent = ''; // Reset the content of the message
+              roomError.className = 'error'; // Reset the visual state of the message
+            } else {
+              showRoomError();
+            }
+          });
+
+          
+          form.addEventListener('submit', function (event) {
+            if(!accessory.validity.valid) {
+              // If it isn't, we display an appropriate error message
+              showAccessoryError();
+              formValidity = false
+            } 
+
+            if(!room.validity.valid) {
+              // If it isn't, we display an appropriate error message
+              showRoomError();
+              formValidity = false
+            }
+
+            console.log(formValidity)
+            if (formValidity === false ){
+              event.preventDefault();
+              formValidity = true
+            }
+          });
+          
+
+          function showAccessoryError() {
+            if(accessory.validity.valueMissing) {
+              accessoryError.textContent = 'Accessory is a required field';
+            } 
+            // Set the styling appropriately
+            accessoryError.className = 'error active';
+          }
+
+          function showRoomError() {
+            if(room.validity.valueMissing) {
+              roomError.textContent = 'Room is a required field. Select floor & building first';
+            } 
+            // Set the styling appropriately
+            roomError.className = 'error active';
+          }
+
+          </script>
+
+{%endblock%}
+

@@ -1,0 +1,118 @@
+{% extends "roomAccessories.html" %}
+
+{%block add_modal %}
+ <!-- Add Modal -->
+ <div class="modal" id="add_room_accessory_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Accessory</h5>
+        </div>
+
+        <div class="modal-body">
+          <form id="add_new_room_accessory" action="/add_new_room_accessory" method="post" novalidate>
+
+            
+            <div class="mb-3">
+                <label for="build_id" class="col-form-label">Building Name:</label>
+                <select class="form-select" id="build_id" name="build_id">
+                    <option disabeled selected hidden>Choose...</option>
+                    {% for b in buildings %}
+                    <option value="{{b['build_id']}}">{{b['build_name']}} </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label for="floor_id" class="col-form-label">Floor Name:</label>
+                <select class="form-select" id="floor_id" name="floor_id">
+                    <option disabeled selected hidden>Choose Building First...</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="room_id" class="col-form-label">Room Number:</label>
+                <select class="form-select" id="room_id" name="room_id" required>
+                    <option value="" disabeled selected hidden>Choose Floor First...</option>
+                </select>
+                <span class="error" aria-live="polite"></span>
+            </div>
+  
+            <div class="mb-3">
+                <label for="accessory_id" class="col-form-label">Accessory Name:</label>
+                <select class="form-select" id="accessory_id" name="accessory_id" required>
+                    <option value="" disabled selected hidden>Choose...</option>
+                    {% for a in accessories %}
+                    <option value="{{a['accessory_id']}}">{{a['accessory_name']}}</option>
+                    {% endfor %}
+                </select>
+                <span class="error" aria-live="polite"></span>
+            </div>
+              
+            <div class="mb-3">
+                <label for="accessory_qty" class="col-form-label">Accessory Quantity:</label>
+                <input type="number" class="form-control" name="accessory_qty" placeholder="Number of accessories in the room">
+            </div>
+
+
+            <div class="modal-footer">
+                <a href="roomAccessories" class="btn btn-secondary">Close</a>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+
+        </form>
+
+        <script>
+        let building_select = document.getElementById('build_id');
+        let floor_select = document.getElementById('floor_id');
+        let room_select = document.getElementById('room_id')
+        
+        building_select.onchange = function() {
+            build_id = building_select.value;
+            fetch('/floors/'+build_id).then(function(response){
+            
+            response.json().then(function(data){
+                console.table(data)
+                let optionHTML = "<option hidden selected value =''> Choose... </option>";
+
+                for (let f of data.floors) {
+                optionHTML += '<option value ="' + f.id + '">' + f.name + '</option>'
+                }
+
+                floor_select.innerHTML = optionHTML;
+            })
+            });
+        }
+
+        floor_select.onchange = function() {
+            floor_id = floor_select.value;
+            fetch('/rooms/'+floor_id).then(function(response){
+                
+                response.json().then(function(data){
+                console.table(data)
+                let optionHTML = '';
+
+                for (let r of data.rooms) {
+                    optionHTML += '<option value ="' + r.id + '">' + r.number + '</option>'
+                }
+
+                room_select.innerHTML = optionHTML;
+                })
+            });
+            }
+        </script>
+
+        </div>
+      </div>
+    </div>
+  </div>
+{%endblock%}
+
+{% block add_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#add_room_accessory_modal").modal("show")
+    })
+</script>
+{%endblock%}

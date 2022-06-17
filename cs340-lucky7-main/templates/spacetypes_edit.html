@@ -1,0 +1,52 @@
+{% extends "spacetypes.html" %}
+
+{%block edit_modal %}
+ <!-- edit Modal -->
+ <div class="modal" id="edit_spacetypes_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Spacetypes</h5>
+        </div>
+        <div class="modal-body">
+
+          <form id="edit_spacetypes" action="/edit_spacetypes/{{spacetypes_to_edit['spacetype_id']}}" method="post" novalidate>
+           
+                <input type="text" id="spacetype_id" hidden value = "{{spacetypes_to_edit['spacetype_id']}}" required maxlength="255">
+            <div class="mb-3">
+                <label for="edit_spacetypes_name" class="col-form-label">Spacetype Name:</label>
+                <input type="text" class="form-control" id="name" name="edit_spacetypes_name" value = "{{spacetypes_to_edit['spacetype_name']}}" required maxlength="255">
+                <span class="error" aria-live="polite"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="edit_spacetypes_description" class="col-form-label">Spacetype Description:</label>
+                <input type="text" class="form-control" name="edit_spacetypes_description" value = "{{spacetypes_to_edit['spacetype_description']}}" maxlength="255">
+            </div>
+
+            <div class="mb-3">
+              <label for="edit_max_occupancy" class="col-form-label">Max Occupancy:</label>
+              <input type="number" class="form-control" name="edit_max_occupancy" value = "{{spacetypes_to_edit['max_occupancy']}}">
+          </div>
+
+            
+          </div>
+          <div class="modal-footer">
+            <a href="/spacetypes" class="btn btn-secondary">Close</a>
+            <button type="submit" class="btn btn-primary" >Submit</button>
+          </div>
+      </form>
+      </div>
+    </div>
+  </div>
+
+{%endblock%}
+
+{% block edit_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#edit_spacetypes_modal").modal("show")
+    })
+</script>
+{%endblock%}

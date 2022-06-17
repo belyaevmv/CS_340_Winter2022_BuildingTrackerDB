@@ -1,0 +1,119 @@
+{% extends "rooms.html" %}
+
+{%block edit_modal %}
+ <!-- edit Modal -->
+ <div class="modal" id="edit_room_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit room</h5>
+        </div>
+        <div class="modal-body">
+          <form id="edit_room" action="/edit_room/{{room_to_edit['room_id']}}" method="post" novalidate>
+              
+              <input type="text" hidden id="room_id" value = "{{room_to_edit['room_id']}}">
+          <div class="mb-3">
+              <label for="edit_room_num" class="col-form-label">Room Number:</label>
+              <input type="text" class="form-control" id="number" name="edit_room_num" value = "{{room_to_edit['room_num']}}" required>
+              <span class="error" aria-live="polite"></span>
+          </div>
+
+          <div class="mb-3">
+              <label for="edit_room_sqft" class="col-form-label">Room Square Feet:</label>
+              <input type="number" class="form-control" id="squareFeet" name="edit_room_sqft" value = "{{room_to_edit['room_sqft']}}" required>
+              <span class="error" aria-live="polite"></span>
+          </div>
+          
+
+          <div class="mb-3">
+            <label for="build_id" class="col-form-label">Associated Building:</label>
+            <select class="form-select" id="build_id" name="build_id">
+                <option selected value="{{room_to_edit['build_id']}}">{{room_to_edit['build_name']}}</option>
+                {% for b in buildings %}
+                <option value="{{b['build_id']}}">{{b['build_name']}} </option>
+                {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-3">
+              <label for="floor_id" class="col-form-label">Associated Floor:</label>
+              <select class="form-select" id="floor_id" name="edit_floor_id" required>
+                  <option selected hidden value = "{{room_to_edit['floor_id']}}"> {{room_to_edit['floor_name']}}</option>
+              </select>
+              <span class="error" aria-live="polite"></span>
+          </div>
+
+
+          <div class="mb-3">
+            <label for="edit_dept_id" class="col-form-label">Associated Department:</label>
+            <select class="form-select" id="department_id" name="edit_dept_id">
+                <option value="">N/A</option>
+                {% for d in departments %}
+                  {% if d['department_id'] == room_to_edit['department_id'] %}
+                  <option selected hidden value="{{d['department_id']}}">{{d['department_name']}}</option>
+                  {% else %}
+                  <option value="{{d['department_id']}}">{{d['department_name']}}</option>
+                  {% endif %}
+                {% endfor %}
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label for="edit_spacetype_id" class="col-form-label">Associated Spacetype:</label>
+            <select class="form-select" id="spacetype_id" name="edit_spacetype_id">
+              <option value="">N/A</option>
+                {% for st in spacetypes %}
+                  {% if st['spacetype_id'] == room_to_edit['spacetype_id'] %}
+                  <option selected hidden value="{{st['spacetype_id']}}">{{st['spacetype_name']}}</option>
+                  {% else %}
+                  <option value="{{st['spacetype_id']}}">{{st['spacetype_name']}}</option>
+                  {% endif %}
+                {% endfor %}
+            </select>
+          </div>
+
+
+        </div>
+        <div class="modal-footer">
+          <a href="/rooms" class="btn btn-secondary">Close</a>
+          <button type="submit" class="btn btn-primary" >Submit</button>
+        </div>
+
+      </form>
+
+      <script>
+        let building_select = document.getElementById('build_id');
+        let floor_select = document.getElementById('floor_id');
+      
+        building_select.onchange = function() {
+          build_id = building_select.value;
+          fetch('/floors/'+build_id).then(function(response){
+            
+            response.json().then(function(data){
+              console.table(data)
+              let optionHTML = '';
+
+              for (let f of data.floors) {
+                optionHTML += '<option value ="' + f.id + '">' + f.name + '</option>'
+              }
+
+              floor_select.innerHTML = optionHTML;
+            })
+          });
+        }
+      </script>
+
+      </div>
+    </div>
+  </div>
+
+{%endblock%}
+
+{% block edit_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#edit_room_modal").modal("show")
+    })
+</script>
+{%endblock%}

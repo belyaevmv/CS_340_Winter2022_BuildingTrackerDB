@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+{% block title %} Departments {% endblock%}
+
+{% block tablename %} 
+    <div class="table-head"></div>
+        <span class="tablename"> 
+          <h2>Departments</h2>
+          
+          <p>Records the details of a university department that occupies Spaces; Having Space Types
+            associated with departments will help designers to ensure required adjacencies between departments are met
+            during expansion planning.<br>
+            (* calculated value, update depends on other table data to be entered)</p>
+        </span>
+
+
+        <span class="header_buttons" >
+          <a href="{{url_for('add_new_department')}}" class="btn btn-success">
+              Add New Department
+          </a>
+        </span>
+    </div>
+{% endblock %}
+
+
+{% block table %}
+<table>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Chair</th>
+      <th>Phone</th>
+      <th>Email</th>
+      <th>Current Head Count</th>
+      <th>Projected Head Count</th>
+      <th>* Current Space Sq.Ft.</th>
+      <th></th>
+      <th></th>
+    </tr>
+
+    {% for row in data %}    
+      <tr>
+          {% for cell in row %}
+          <td>{{row[cell]}}</td>
+          {% endfor %}
+          
+          <td>
+              <button type="button" class="button" onclick="window.location ='/edit_department/{{row['department_id']}}'" >
+                  <i class="fa-solid fa-pen"></i>
+              </button>
+              
+              <button type="button" class="button" onclick="window.location ='/delete_department/{{row['department_id']}}'">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+          </td>
+      </tr> 
+    {% endfor %}
+</table> 
+{%endblock%}
+
+
+
+
+
+
+{%block modal%}
+  <!-- Modal -->
+  <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Department</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+                <label for="department_name" class="col-form-label">Department Name:</label>
+                <input type="text" class="form-control" id="department_name">
+            </div>
+            <div class="mb-3">
+                <label for="department_chair_name" class="col-form-label">Department Chair Name:</label>
+                <input type="text" class="form-control" id="department_chair_name">
+            </div>
+            <div class="mb-3">
+                <label for="department_contact_num" class="col-form-label">Contact Nmber:</label>
+                <input type="int" class="form-control" id="department_contact_num">
+            </div>
+            <div class="mb-3">
+                <label for="department_contact_email" class="col-form-label" placeholder="your-email@host.com">
+                  Contact Email:
+                </label>
+                <input type="email" class="form-control" id="department_contact_email">
+            </div>
+            <div class="mb-3">
+                <label for="current_dept_size" class="col-form-label" placeholder="Current number of department staff">
+                    Current Department Size:</label>
+                <input type="number" class="form-control" id="current_dept_size">
+            </div>
+            <div class="mb-3">
+                <label for="projected_dept_size" class="col-form-label" placeholder="Projected number of department staff by end of year">
+                    Projected Department Size:</label>
+                <input type="number" class="form-control" id="projected_dept_size">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="{{ url_for('static', filename='app.css')}}">Close</button>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("exampleModal").modal("show")
+    })
+</script>
+{%endblock%}
+
+
+{% block form_validation%}
+        <!-- Script for form validation-->
+        <script>
+
+          const form  = document.getElementsByTagName('form')[0];
+          const rows = document.getElementsByTagName('tr');
+          const id = document.getElementById('department_id')
+          
+          const name = document.getElementById('name');
+          const nameError = document.querySelector('#name + span.error');
+
+          const chairName= document.getElementById('chairName');
+          const chairNameError = document.querySelector('#chairName + span.error');
+
+          const phone = document.getElementById('phone');
+          const phoneError = document.querySelector('#phone + span.error');
+
+          const email = document.getElementById('email');
+          const emailError = document.querySelector('#email + span.error');
+
+          var formValidity = true
+              
+          name.addEventListener('input', function (event) {
+            if (name.validity.valid) {
+              nameError.textContent = ''; // Reset the content of the message
+              nameError.className = 'error'; // Reset the visual state of the message
+            } else {
+              showNameError();
+            }
+          });
+
+          chairName.addEventListener('input', function (event) {
+            if (chairName.validity.valid) {
+              chairNameError.textContent = ''; // Reset the content of the message
+              chairNameError.className = 'error'; // Reset the visual state of the message
+            } else {
+              showChairNameError();
+            }
+          });
+
+          phone.addEventListener('input', function (event) {
+            if (phone.validity.valid) {
+              phoneError.textContent = ''; // Reset the content of the message
+              phoneError.className = 'error'; // Reset the visual state of the message
+            } else {
+              showPhoneError();
+            }
+          });
+
+          email.addEventListener('input', function (event) {
+            if (email.validity.valid) {
+              emailError.textContent = ''; // Reset the content of the message
+              emailError.className = 'error'; // Reset the visual state of the message
+            } else {
+              showEmailError();
+            }
+          });
+
+          
+          form.addEventListener('submit', function (event) {
+            if(!name.validity.valid) {
+              showNameError();
+              formValidity = false
+            } else  {
+              for (const r of rows){
+              if (r.cells[1].innerText === name.value)  {
+                if (id.value === 'None') {
+                nameError.textContent = 'Department with this name already exists. Provide unique department name.';
+                nameError.className = 'error active';
+                formValidity = false
+                break;
+                } else if (r.cells[0].innerText !== id.value) {
+                  nameError.textContent = 'Department with this name already exists. Provide unique department name.';
+                  nameError.className = 'error active';
+                  formValidity = false
+                  break;
+                  } 
+                }
+              }
+            }
+
+            if(!chairName.validity.valid) {
+              showChairNameError();
+              formValidity = false
+            }
+            if(!phone.validity.valid) {
+              showPhoneError();
+              formValidity = false
+            }
+            if(!email.validity.valid) {
+              showEmailError();
+              formValidity = false
+            }
+            
+
+            if (formValidity === false ){
+              event.preventDefault();
+              formValidity = true
+            }
+          });
+          
+          function showNameError() {
+            if(name.validity.valueMissing) {
+              nameError.textContent = 'Department Name is a required field';
+            } 
+            // Set the styling appropriately
+            nameError.className = 'error active';
+          }
+
+          function showChairNameError() {
+            if(chairName.validity.valueMissing) {
+              chairNameError.textContent = 'Department Chair Name is a required field';
+            } 
+            // Set the styling appropriately
+            chairNameError.className = 'error active';
+          }
+
+          function showPhoneError() {
+            if(phone.validity.valueMissing) {
+              phoneError.textContent = 'Phone Number is a required field';
+            } else if (phone.value.length > phone.minLength){
+              phoneError.textContent = `Phone Number should be ${ phone.minLength } digits. You entered ${ phone.value.length }.`
+            } else if (phone.validity.patternMismatch) {
+              phoneError.textContent = 'Phone Number should contain only numbers and follow xxxxxxxxxx format' 
+            }
+            // Set the styling appropriately
+            phoneError.className = 'error active';
+          }
+          
+          function showEmailError() {
+            if(email.validity.valueMissing) {
+              emailError.textContent = 'Email is required field.';
+            } else if(email.validity.typeMismatch) {
+              emailError.textContent = 'Entered value is not an e-mail address.';
+            } 
+            // Set the styling appropriately
+            emailError.className = 'error active';
+          }
+
+          </script>
+
+{%endblock%}

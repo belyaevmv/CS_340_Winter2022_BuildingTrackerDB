@@ -1,0 +1,138 @@
+{% extends "roomAccessories.html" %}
+
+{%block edit_modal %}
+ <!-- Edit Modal -->
+ <div class="modal" id="edit_room_accessory_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Room Accessory</h5>
+        </div>
+
+        <div class="modal-body">
+          <form id="edit_room_accessory" action="/edit_room_accessory/{{room_accessory_to_edit['room_accessory_id']}}" method="post" novalidate>
+
+            
+            <div class="mb-3">
+                <label for="build_id" class="col-form-label">Building Name:</label>
+                <select class="form-select" id="build_id" name="build_id">
+                    {% for b in buildings %}
+                        {%if b['build_id'] == room_accessory_to_edit['build_id'] %}
+                        <option selected value="b[build_id">{{b['build_name']}}</option>
+                        {% else %}
+                        <option value="{{b['build_id']}}">{{b['build_name']}} </option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label for="floor_id" class="col-form-label">Floor Name:</label>
+                <select class="form-select" id="floor_id" name="floor_id">
+                    {% for f in floors%}
+                        {% if f['floor_id'] == room_accessory_to_edit['floor_id'] %}
+                        <option selected value="f['floor_id']">{{f['floor_name']}}</option>
+                        {% else %}
+                        <option value="{{f['floor_id']}}">{{f['floor_name']}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="room_id" class="col-form-label">Room Number:</label>
+                <select class="form-select" id="room_id" name="edit_room_id" required>
+                    {% for r in rooms %}
+                        {% if r['room_id'] == room_accessory_to_edit['room_id'] %}
+                        <option selected value="r['room_id']">{{r['room_num']}}</option>
+                        {% else %}
+                        <option value="{{r['room_id']}}">{{r['room_num']}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <span class="error" aria-live="polite"></span>
+            </div>
+  
+            <div class="mb-3">
+                <label for="accessory_id" class="col-form-label">Accessory Name:</label>
+                <select class="form-select" id="accessory_id" name="edit_accessory_id" required>
+                    {% for a in accessories %}
+                        {% if a['accessory_id'] == room_accessory_to_edit['accessory_id'] %}
+                            <option selected value="{{a['accessory_id']}}">{{a['accessory_name']}}</option>
+                        {% else %}
+                            <option value="{{a['accessory_id']}}">{{a['accessory_name']}}</option>
+                        {%endif%}
+                    {% endfor %}
+                </select>
+                <span class="error" aria-live="polite"></span>
+            </div>
+              
+            <div class="mb-3">
+                <label for="accessory_qty" class="col-form-label">Accessory Quantity:</label>
+                <input type="number" class="form-control" name="edit_accessory_qty" value="{{room_accessory_to_edit['accessory_qty']}}">
+            </div>
+
+            <div class="modal-footer">
+                <a href="/roomAccessories" class="btn btn-secondary">Close</a>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+
+        </form>
+
+        <script>
+        let building_select = document.getElementById('build_id');
+        let floor_select = document.getElementById('floor_id');
+        let room_select = document.getElementById('room_id')
+        
+        building_select.onchange = function() {
+            room_select.innerHTML = "<option hidden selected value =''> Select Floor First... </option>"
+            
+            build_id = building_select.value;
+            fetch('/floors/'+build_id).then(function(response){
+            
+            response.json().then(function(data){
+                console.table(data)
+                let optionHTML = "<option hidden selected value =''> Choose... </option>";
+
+                for (let f of data.floors) {
+                optionHTML += '<option value ="' + f.id + '">' + f.name + '</option>'
+                }
+
+                floor_select.innerHTML = optionHTML;
+            })
+            });
+        }
+
+        floor_select.onchange = function() {
+            floor_id = floor_select.value;
+            fetch('/rooms/'+floor_id).then(function(response){
+                
+                response.json().then(function(data){
+                console.table(data)
+                let optionHTML = '';
+
+                for (let r of data.rooms) {
+                    optionHTML += '<option value ="' + r.id + '">' + r.number + '</option>'
+                }
+
+                room_select.innerHTML = optionHTML;
+                })
+            });
+            }
+        
+        </script>
+    
+        </div>
+      </div>
+    </div>
+  </div>
+{%endblock%}
+
+{% block edit_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#edit_room_accessory_modal").modal("show")
+    })
+</script>
+{%endblock%}

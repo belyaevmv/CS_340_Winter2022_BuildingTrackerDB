@@ -1,0 +1,64 @@
+{% extends "floors.html" %}
+
+{%block edit_modal %}
+ <!-- edit Modal -->
+ <div class="modal" id="edit_floor_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Floor</h5>
+        </div>
+        <div class="modal-body">
+
+          <form id="edit_floor" action="/edit_floor/{{floor_to_edit['floor_id']}}" method="post" novalidate>
+
+          <input type="text" hidden id="floor_id" value = "{{floor_to_edit['floor_id']}}">
+          
+          <div class="mb-3">
+              <label for="edit_floor_number" class="col-form-label">Floor Number:</label>
+              <input type="text" class="form-control" id="name" name="edit_floor_name" value = "{{floor_to_edit['floor_name']}}">
+              <span class="error" aria-live="polite"></span>
+          </div>
+
+          <div class="mb-3">
+              <label for="edit_floor_sqft" class="col-form-label">Floor Square Feet:</label>
+              <input type="number" class="form-control" id="squareFeet" name="edit_floor_sqft" value = "{{floor_to_edit['floor_sqft']}}">
+              <span class="error" aria-live="polite"></span>
+          </div>
+
+          <!-- Not sure about this, modified, copied from floors_add.html -->
+          <div class="mb-3">
+            <label for="edit_build_id" class="col-form-label">Associated Building:</label>
+            <select class="form-select" id="building" name="edit_build_id">
+                <option disabled selected hidden value="">Choose...</option>
+                {% for b in buildings %}
+                  {% if b['build_id'] == floor_to_edit['build_id'] %}
+                  <option selected value="{{b['build_id']}}">{{b['build_name']}}</option>
+                  {% else %}
+                  <option value="{{b['build_id']}}">{{b['build_name']}}</option>
+                  {% endif %}
+                {% endfor %}
+            </select>
+            <span class="error" aria-live="polite"></span>
+          </div>
+          
+        </div>
+        <div class="modal-footer">
+          <a href="/floors" class="btn btn-secondary">Close</a>
+          <button type="submit" class="btn btn-primary" >Submit</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+
+{%endblock%}
+
+{% block edit_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#edit_floor_modal").modal("show")
+    })
+</script>
+{%endblock%}

@@ -1,0 +1,120 @@
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: local('Material Icons'), 
+       local('MaterialIcons-Regular'), 
+       url(https://fonts.gstatic.com/s/materialicons/v21/2fcrYFNaTjcS6g4U3t-Y5UEw0lE80llgEseQY3FEmqw.woff) format('woff');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+}
+
+body{
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: rgb(42, 42, 58);
+  font-size: 15pt;
+  margin: 30pt;
+  padding: 15pt;
+  color:lightgray;
+ }
+ 
+ h1{
+   font-family: Arial, Helvetica, sans-serif;
+   font:bold;
+   font-size: 35pt;
+   color: lightgray;
+   text-align: center;
+   padding-top: 50em;
+   padding-bottom: 50em;
+ }
+ 
+ h2{
+   font-family: Arial, Helvetica, sans-serif;
+   font-size: 15pt;
+   font-weight: bold;
+   text-align: left;
+ }
+ .nav{
+   background: rgb(150, 150, 150);
+   font-family: Arial, Helvetica, sans-serif;
+   font-size: 15pt;
+   text-align: center;
+ }
+ .nav > a{
+   color: black;
+ }
+  
+ table{
+   width:100%;
+ }
+
+ caption{
+  text-align: left;
+  font-size: 10pt;
+  margin-bottom: 5pt;
+}
+
+  th{
+    background-color: #b98d12;
+    font-weight: bold;
+    position:sticky;
+    top: 0;
+  }
+  
+  tr{
+    font-size: 15pt;
+  }
+  
+  tr:hover{background-color: rgb(198, 198, 198);}
+
+  button.button {
+    border: none;
+    background-color: transparent;
+}
+ 
+  .button:hover{
+    background: grey;
+    border: grey;
+  }
+
+  .table-head{
+    padding-top: 20pt;
+    padding-bottom: 20pt;
+  }
+  .header_buttons{
+    float: right;
+    border: none;
+    padding-bottom: 20pt;
+  }
+
+
+
+  /* This is our style for the invalid fields 
+input:invalid{
+  border-color: #900;
+  background-color: #FDD;
+}*/
+
+input:focus:invalid {
+  outline: none;
+}
+
+/* This is the style of our error messages */
+.error {
+  width  : 100%;
+  padding: 0;
+
+  font-size: 80%;
+  color: white;
+  background-color: #900;
+  border-radius: 0 0 5px 5px;
+
+  box-sizing: border-box;
+}
+
+.error.active {
+  padding: 0.3em;
+}

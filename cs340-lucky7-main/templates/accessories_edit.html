@@ -1,0 +1,46 @@
+{% extends "accessories.html" %}
+
+{%block edit_modal %}
+ <!-- edit Modal -->
+ <div class="modal" id="edit_accessory_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Accessory</h5>
+        </div>
+        <div class="modal-body">
+          <form id="edit_accessory" action="/edit_accessory/{{accessory_to_edit['accessory_id']}}" method="post" novalidate>
+
+          <div class="mb-3">
+              <label for="edit_accessory_name" class="col-form-label">Accessory Name:</label>
+              <input type="text" class="form-control" id="name" name="edit_accessory_name" value = "{{accessory_to_edit['accessory_name']}}" required maxlength="255">
+              <span class="error" aria-live="polite"></span>
+          </div>
+
+          <div class="mb-3">
+              <label for="edit_accessory_description" class="col-form-label">Accessory Description:</label>
+              <input type="textarea" class="form-control" name="edit_accessory_description" value = "{{accessory_to_edit['accessory_desc']}}" maxlength="255">
+          </div>
+          <input type="text" id="accessory_id"  value = "{{accessory_to_edit['accessory_id']}}" hidden>
+
+          
+        </div>
+        <div class="modal-footer">
+          <a href="/accessories" class="btn btn-secondary">Close</a>
+          <button type="submit" class="btn btn-primary" >Submit</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+
+{%endblock%}
+
+{% block edit_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#edit_accessory_modal").modal("show")
+    })
+</script>
+{%endblock%}

@@ -1,0 +1,48 @@
+{% extends "accessories.html" %}
+
+{%block add_modal %}
+ <!-- Add Modal -->
+ <div class="modal" id="add_accessory_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Accessorye</h5>
+        </div>
+
+        <div class="modal-body">
+          <form id="add_new_accessory" action="/add_new_accessory" method="post" novalidate>
+
+            <div class="mb-3">
+                <label for="accessory_name" class="col-form-label">Accessory Name:</label>
+                <input type="text" class="form-control" id="name" name="accessory_name" required maxlength="255">
+                <span class="error" aria-live="polite"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="accessory_description" class="col-form-label" maxlength="255">Accessory Description:</label>
+                <input type="textarea" class="form-control" name="accessory_description">
+            </div>
+
+            <input type="text" id="accessory_id" value = "None" hidden>
+
+
+            <div class="modal-footer">
+                <a href="accessories" class="btn btn-secondary">Close</a>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{%endblock%}
+
+{% block add_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#add_accessory_modal").modal("show")
+    })
+</script>
+{%endblock%}

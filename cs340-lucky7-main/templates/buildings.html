@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+{% block title %} Buildings {% endblock%}
+
+{% block tablename %} 
+  <div class="table-head">
+      <span class="tablename"> 
+        <h2>University Buildings</h2> 
+        <p>Records and details of buildings that are part of the university campus<br>
+        (* calculated value, update depends on other table data to be entered)</p> 
+      </span>
+
+      <span class="header_buttons" >
+          <a href="{{url_for('search_buildings')}}" class="btn btn-secondary">
+            Search Buildings
+          </a>
+          <span class="header_buttons" >
+            <a href="{{url_for('add_new_building')}}" class="btn btn-success">
+                Add New Building
+            </a>
+          </span>
+      </span>
+  </div>
+{% endblock %}
+
+
+{% block table %}
+  <!-- Table from query-->
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Building Name</th>
+      <th>Street Num </th>
+      <th>Street Name </th>
+      <th>City</th>
+      <th>State</th>
+      <th>Zip Code</th>
+      <!-- <th>Gross Sq.Ft.</th> -->
+      <!-- <th>Usable Sq.Ft</th> -->
+      <th>* Efficiency Factor</th>
+      <th></th>
+    </tr>
+
+    {% for row in data %}    
+        <tr>
+          {% for cell in row %}
+          <td>{{row[cell]}}</td>
+          {% endfor %}
+          
+          <td>
+              <button type="button" class="button" onclick="window.location = '/edit_building/{{row['build_id']}}'" >
+                  <i class="fa-solid fa-pen"></i>
+              </button>
+              
+              <button type="button" class="button" onclick="window.location = '/delete_building/{{row['build_id']}}'">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+          </td>
+        </tr> 
+    {% endfor %}
+</table> 
+{% endblock %}
+
+
+
+{% block form_validation%}
+        <!-- Script for form validation-->
+        <script>
+
+          // There are many ways to pick a DOM node; here we get the form itself and the email
+          // input box, as well as the span element into which we will place the error message.
+          const form  = document.getElementsByTagName('form')[0];
+          const rows = document.getElementsByTagName('tr');
+          const id = document.getElementById('build_id')
+          
+          const name = document.getElementById('name');
+          const nameError = document.querySelector('#name + span.error');
+
+          const number = document.getElementById('number');
+          const numberError = document.querySelector('#number + span.error');
+
+          const street = document.getElementById('street');
+          const streetError = document.querySelector('#street + span.error');
+
+          const city = document.getElementById('city');
+          const cityError = document.querySelector('#city + span.error');
+
+          const state = document.getElementById('state');
+          const stateError = document.querySelector('#state + span.error');
+          
+          const zip = document.getElementById('zip')
+          const zipError = document.querySelector('#zip + span.error')
+
+          var formValidity = true
+              
+          name.addEventListener('input', function (event) {
+            if (name.validity.valid) {
+              nameError.textContent = ''; // Reset the content of the message
+              nameError.className = 'error'; // Reset the visual state of the message
+            } else {
+              showNameError();
+            }
+          });
+
+          number.addEventListener('input', function (event) {
+            if (number.validity.valid) {
+              numberError.textContent = ''; // Reset the content of the message
+              numberError.className = 'error'; // Reset the visual state of the message
+            } else {
+              showNumberError();
+            }
+          });
+
+          street.addEventListener('input', function (event) {
+            if (street.validity.valid) {
+              streetError.textContent = ''; // Reset the content of the message
+              streetError.className = 'error'; // Reset the visual state of the message
+            } else {
+              showStreetError();
+            }
+          });
+
+          city.addEventListener('input', function (event) {
+            if (city.validity.valid) {
+              cityError.textContent = ''; // Reset the content of the message
+              cityError.className = 'error'; // Reset the visual state of the message
+            } else {
+              showCityError();
+            }
+          });
+
+          state.addEventListener('input', function (event) {
+            // Each time the user types something, we check if the
+            // form fields are valid.
+            if (state.validity.valid) {
+              // In case there is an error message visible, if the field
+              // is valid, we remove the error message.
+              stateError.textContent = ''; // Reset the content of the message
+              stateError.className = 'error'; // Reset the visual state of the message
+            } else {
+              // If there is still an error, show the correct error
+              showStateError();
+            }
+          });
+          
+          zip.addEventListener('input', function (event) {
+            // Each time the user types something, we check if the
+            // form fields are valid.
+            if (zip.validity.valid) {
+              // In case there is an error message visible, if the field
+              // is valid, we remove the error message.
+              zipError.textContent = ''; // Reset the content of the message
+              zipError.className = 'error'; // Reset the visual state of the message
+            } else {
+              // If there is still an error, show the correct error
+              showZipError();
+            }
+          });
+          
+          form.addEventListener('submit', function (event) {
+            // if the state field is valid, we let the form submit
+            if(!state.validity.valid) {
+              // If it isn't, we display an appropriate error message
+              showStateError();
+              formValidity = false
+            }
+            if(!zip.validity.valid) {
+              // If it isn't, we display an appropriate error message
+              showZipError();
+              formValidity = false
+            }
+            if(!number.validity.valid) {
+              // If it isn't, we display an appropriate error message
+              showNumberError();
+              formValidity = false
+            }
+            if(!street.validity.valid) {
+              // If it isn't, we display an appropriate error message
+              showStreetError();
+              formValidity = false
+            }
+            if(!city.validity.valid) {
+              // If it isn't, we display an appropriate error message
+              showCityError();
+              formValidity = false
+            }
+            if(!name.validity.valid) {
+              // If it isn't, we display an appropriate error message
+              showNameError();
+              formValidity = false
+            } else {
+                for (const r of rows){
+                if (r.cells[1].innerText === name.value) {
+                  if (id.value === 'None'){
+                  nameError.textContent = 'Building with this name already exist, name must be unique';
+                  nameError.className = 'error active';
+                  formValidity = false
+                  break;
+                  } else if (r.cells[0].innerText !== id.value) {
+                  nameError.textContent = 'Building with this name already exist, name must be unique';
+                  nameError.className = 'error active';
+                  formValidity = false
+                  break;
+                  }
+                }
+              }
+            }
+
+
+            if (formValidity === false ){
+              event.preventDefault();
+              formValidity = true
+            }
+          });
+          
+          function showStateError() {
+            if(state.validity.valueMissing) {
+              // If the field is empty,
+              // display the following error message.
+              stateError.textContent = 'State is a required field';
+            } else if(state.validity.patternMismatch) {
+              // If the field doesn't match pattern,
+              // display the following error message.
+              stateError.textContent = `Entered value needs to be two letter state code. You entered only ${ state.value.length }letter.`;
+            } 
+            // Set the styling appropriately
+            stateError.className = 'error active';
+          }
+          
+          function showZipError() {
+            if(zip.validity.rangeOverflow) {
+              // If the field is greater then a Max value,
+              // display the following error message.
+              zipError.textContent = 'Zip should be 5 digit number or Empty field';
+            } else if(zip.validity.rangeUnderflow) {
+              // If the field less then a min value,
+              // display the following error message.
+              zipError.textContent = 'Zip should be 5 digit number or Empty field';
+            } 
+            // Set the styling appropriately
+            zipError.className = 'error active';
+          }
+
+          function showNumberError() {
+            if(number.validity.valueMissing) {
+              numberError.textContent = 'Building Number is a required field';
+            } else if(number.validity.tooLong) {
+              numberError.textContent = `Entered value is too long. You entry needs to be under ${ number.value.maxlength }letters.`;
+            } 
+            // Set the styling appropriately
+            numberError.className = 'error active';
+          }
+          
+          function showStreetError() {
+            if(street.validity.valueMissing) {
+              streetError.textContent = 'Street is a required field';
+            } else if(street.validity.tooLong) {
+              streetError.textContent = `Entered value is too long. You entry needs to be under ${ street.value.maxlength }letters.`;
+            } 
+            // Set the styling appropriately
+            streetError.className = 'error active';
+          }
+
+          function showCityError() {
+            if(city.validity.valueMissing) {
+              cityError.textContent = 'City is a required field';
+            } else if(city.validity.tooLong) {
+              cityError.textContent = `Entered value is too long. You entry needs to be under ${ city.value.maxlength }letters.`;
+            } 
+            // Set the styling appropriately
+            cityError.className = 'error active';
+          }
+
+          function showNameError() {
+            if(name.validity.valueMissing) {
+              nameError.textContent = 'Building Name is a required field';
+            } else if(name.validity.tooLong) {
+              nameError.textContent = `Entered value is too long. You entry needs to be under ${ name.value.maxlength }letters.`;
+            } 
+            // Set the styling appropriately
+            nameError.className = 'error active';
+          }
+
+          </script>
+
+{%endblock%}
+
+

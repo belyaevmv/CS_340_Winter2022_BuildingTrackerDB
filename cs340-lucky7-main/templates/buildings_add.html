@@ -1,0 +1,74 @@
+{% extends "buildings.html" %}
+
+{%block add_modal %}
+<div class="modal" id="add_building_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Building</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <form id="add_building" action="/add_new_building" method="post" novalidate>
+
+            <input type="text" hidden id="build_id" value = "None">
+            <div class="mb-3">
+              <label for="building-name" class="col-form-label">Building Name:</label>
+              <input type="text" class="form-control" id="name" name="building-name" required maxlength="255">
+              <span class="error" aria-live="polite"></span>
+            </div>
+
+            <div class="mb-3">
+              <label for="building-address-number" class="col-form-label">Building Number:</label>
+              <input type="text" class="form-control" id="number" name="building-address-number" required maxlength="255">
+              <span class="error" aria-live="polite"></span>
+            </div>
+
+            <div class="mb-3">
+              <label for="building-address-street" class="col-form-label">Street Name:</label>
+              <input type="text" class="form-control" id="street" name="building-address-street" required maxlength="255">
+              <span class="error" aria-live="polite"></span>
+            </div>
+
+            <div class="mb-3">
+              <label for="building-address-city" class="col-form-label">City:</label>
+              <input type="text" class="form-control" id="city" name="building-address-city" required maxlength="255">
+              <span class="error" aria-live="polite"></span>
+            </div>
+
+            <div class="mb-3">
+              <label for="building-address-state" class="col-form-label">State:</label> 
+              <input type="text" class="form-control" id = "state" name="building-address-state" 
+              required maxlength="2" minlength="2" pattern="[A-Za-z]{2}">
+              <span class="error" aria-live="polite"></span>
+            </div>
+
+            <div class="mb-3">
+              <label for="building-address-zip" class="col-form-label">Zip Code:</label>
+              <input type="number" class="form-control" id="zip" name="building-address-zip" min="10000" max="99999">
+              <span class="error" aria-live="polite"></span>
+            </div>
+
+            <div class="modal-footer">
+                <a href="buildings" class="btn btn-secondary">Close</a>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+{%endblock%}
+
+{% block add_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#add_building_modal").modal("show")
+    })
+</script>
+
+{%endblock%}

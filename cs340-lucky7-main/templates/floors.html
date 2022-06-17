@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block title %} Floors {% endblock%}
+
+{% block tablename %} 
+    <div class="table-head"></div>
+        <span class="tablename"> 
+            <h2>Floors</h2>
+        </span>
+
+        <span class="header_buttons" >
+          <a href="{{url_for('add_new_floor')}}" class="btn btn-success">
+              Add New Floor
+          </a>
+      </span>
+    </div>
+{% endblock %}
+
+{% block table %}
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Floor Number</th>
+    <th>Square Feet</th>
+    <th>Building</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+  {% for row in data %}    
+      <tr>
+          {% for cell in row %}
+          <td>{{row[cell]}}</td>
+          {% endfor %}
+          
+          <td>
+              <button type="button" class="button" onclick="window.location ='/edit_floor/{{row['floor_id']}}'">
+                  <i class="fa-solid fa-pen"></i>
+              </button>
+              
+              <button type="button" class="button" onclick="window.location ='/delete_floor/{{row['floor_id']}}'">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+          </td>
+      </tr> 
+  {% endfor %}
+</table> 
+{%endblock%}
+
+
+{% block form_validation%}
+        <!-- Script for form validation-->
+        <script>
+
+          // There are many ways to pick a DOM node; here we get the form itself and the email
+          // input box, as well as the span element into which we will place the error message.
+          const form  = document.getElementsByTagName('form')[0];
+          const rows = document.getElementsByTagName('tr');
+          const id = document.getElementById('floor_id');
+
+          const name = document.getElementById('name');
+          const nameError = document.querySelector('#name + span.error');
+
+          const squareFeet = document.getElementById('squareFeet');
+          const squareFeetError = document.querySelector('#squareFeet + span.error');
+
+          const building = document.getElementById('building');
+          const buildingError = document.querySelector('#building + span.error');
+
+          var formValidity = true
+
+          name.addEventListener('input', function (event) {
+            if (name.validity.valid) {
+              nameError.textContent = ''; // Reset the content of the message
+              nameError.className = 'error'; // Reset the visual state of the message
+            } else {
+              showNameError();
+            }
+          });
+
+          squareFeet.addEventListener('input', function (event) {
+            if (squareFeet.validity.valid) {
+              squareFeetError.textContent = ''; // Reset the content of the message
+              squareFeetError.className = 'error'; // Reset the visual state of the message
+            } else {
+              showSquareFeetError();
+            }
+          });
+
+          building.addEventListener('input', function (event) {
+            if (building.validity.valid) {
+              buildingError.textContent = ''; // Reset the content of the message
+              buildingError.className = 'error'; // Reset the visual state of the message
+            } else {
+              showBuildingError();
+            }
+          });
+
+          
+          form.addEventListener('submit', function (event) {
+            if(!name.validity.valid) {
+              // If it isn't, we display an appropriate error message
+              showNameError();
+              formValidity = false
+            } else {
+                for (const r of rows){
+                if (r.cells[1].innerText === name.value) {
+                  if (id.value === 'None') {
+                    if (r.cells[3].innerText === building.selectedOptions[0].innerText) {
+                      nameError.textContent = 'Floor with this name already exists in this building, select new floor or building';
+                      nameError.className = 'error active';
+                      formValidity = false
+                      break;
+                    }
+                  } else if (r.cells[0].innerText !== id.value) {
+                    if (r.cells[3].innerText === building.selectedOptions[0].innerText) {
+                      nameError.textContent = 'Floor with this name already exists in this building, select new floor or building';
+                      nameError.className = 'error active';
+                      formValidity = false
+                    }
+                  }
+                }
+              }
+            }
+
+            if(!squareFeet.validity.valid) {
+              // If it isn't, we display an appropriate error message
+              showSquareFeetError();
+              formValidity = false
+            }
+
+            if(!building.validity.valid) {
+              // If it isn't, we display an appropriate error message
+              showBuildingError();
+              formValidity = false
+            }
+          
+            console.log(formValidity)
+            if (formValidity === false ){
+              event.preventDefault();
+              formValidity = true
+            }
+          });
+          
+
+          function showNameError() {
+            if(name.validity.valueMissing) {
+              nameError.textContent = 'Floor Name is a required field';
+            } 
+            // Set the styling appropriately
+            nameError.className = 'error active';
+          }
+          
+          function showSquareFeetError() {
+            if(squareFeet.validity.valueMissing) {
+                squareFeetError.textContent = 'Square Feet is a required field';
+            } 
+            // Set the styling appropriately
+            squareFeetError.className = 'error active';
+          }
+
+          function showBuildingError() {
+            if(building.validity.valueMissing) {
+              buildingError.textContent = 'Building is a required field';
+            } 
+            // Set the styling appropriately
+            buildingError.className = 'error active';
+          }
+
+          </script>
+
+{%endblock%}
+

@@ -1,0 +1,10 @@
+__pycache__
+bin
+include
+lib
+lib64
+src
+venv
+pyvenv.cfg
+pip-selfcheck.json
+step1.j2

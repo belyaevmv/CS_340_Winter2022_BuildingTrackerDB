@@ -1,0 +1,78 @@
+{% extends "buildings.html" %}
+
+{%block edit_modal %}
+ <!-- edit Modal -->
+ <div class="modal" id="edit_building_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Building</h5>
+        </div>
+        <div class="modal-body">
+
+          <form id="edit_building" action="/edit_building/{{build_to_edit['build_id']}}" method="post" novalidate>
+          
+          <input type="text" hidden id="build_id" value = "{{build_to_edit['build_id']}}">
+          <div class="mb-3">
+              <label for="edit_building_name" class="col-form-label">Building Name:</label>
+              <input type="text" class="form-control" id="name" name="edit_building_name" value = "{{build_to_edit['build_name']}}" 
+              required maxlength="255">
+              <span class="error" aria-live="polite"></span>
+          </div>
+
+          <div class="mb-3">
+              <label for="edit_building_address_number" class="col-form-label">Building Number:</label>
+              <input type="text" class="form-control" id="number" name="edit_building_address_number" value = "{{build_to_edit['address_build_number']}}" 
+              required maxlength="255">
+              <span class="error" aria-live="polite"></span>
+          </div>
+
+          <div class="mb-3">
+              <label for="edit_building_address_street" class="col-form-label">Street Name:</label>
+              <input type="text" class="form-control" id="street" name="edit_building_address_street" value = "{{build_to_edit['address_street']}}" 
+              required maxlength="255">
+              <span class="error" aria-live="polite"></span>
+          </div>
+
+          <div class="mb-3">
+            <label for="edit_building_address_city" class="col-form-label">City:</label>
+            <input type="text" class="form-control" id="city" name="edit_building_address_city" value = "{{build_to_edit['address_city']}}" 
+            required maxlength="255">
+            <span class="error" aria-live="polite"></span>
+          </div>
+
+          <div class="mb-3">
+              <label for="edit_building_address_state" class="col-form-label">State:</label>
+              <input type="text" class="form-control" id="state" name="edit_building_address_state" value = "{{build_to_edit['address_state']}}" 
+              required maxlength="2" minlength="2" pattern="[A-Za-z]{2}">
+              <span class="error" aria-live="polite"></span>
+          </div>
+
+          <div class="mb-3">
+              <label for="edit_building_address_zip" class="col-form-label">Zip Code:</label>
+              <input type="number" class="form-control" id="zip" name="edit_building_address_zip" value = "{{build_to_edit['address_zip']}}"
+              min="10000" max="99999">
+              <span class="error" aria-live="polite"></span>
+          </div>
+
+          
+        </div>
+        <div class="modal-footer">
+          <a href="/buildings" class="btn btn-secondary">Close</a>
+          <button type="submit" class="btn btn-primary" >Submit</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+ 
+{%endblock%}
+
+{% block edit_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#edit_building_modal").modal("show")
+    })
+</script>
+{%endblock%}

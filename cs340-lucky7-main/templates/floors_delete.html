@@ -1,0 +1,39 @@
+{% extends "floors.html" %}
+
+{%block delete_modal %}
+ <!-- delete Modal -->
+ <div class="modal" id="delete_floor_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+        </div>
+
+        <div class="modal-body">
+          <form id="delete_floor" action="/delete_floor/{{floor_id}}" method="post">
+            <p>You are about to delete following items:
+                <ul class="list-group">
+                    <li class="list-group-item">Floor Name: {{results[0]['floor_name']}} in {{results[0]['build_name']}}</li>
+                    <li class="list-group-item">Number of Associated Rooms: {{results[0]['room']}}</li>
+                </ul>
+            </p>
+            <p>This operation cannot be undone.</p>
+            <div class="modal-footer">
+                <a href="/floors" class="btn btn-secondary">Close</a>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{%endblock%}
+
+{% block delete_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#delete_floor_modal").modal("show")
+    })
+</script>
+{%endblock%}

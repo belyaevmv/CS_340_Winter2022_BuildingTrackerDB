@@ -1,0 +1,57 @@
+{% extends "floors.html" %}
+
+{%block add_modal %}
+ <!-- Add Modal -->
+ <div class="modal" id="add_floor_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Floor</h5>
+        </div>
+
+        <div class="modal-body">
+          <form id="add_new_floor" action="/add_new_floor" method="post" novalidate>
+
+            <input type="text" hidden id="floor_id" value = "None">
+            <div class="mb-3">
+                <label for="floor_name" class="col-form-label">Floor Number:</label>
+                <input type="text" class="form-control" id="name" name="floor_name" required maxlength="3">
+                <span class="error" aria-live="polite"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="floor_sqft" class="col-form-label">Floor Square Feet:</label>
+                <input type="number" class="form-control" id="squareFeet" name="floor_sqft" required>
+                <span class="error" aria-live="polite"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="build_id" class="col-form-label">Associated Building:</label>
+                <select class="form-select" id="building" name="build_id" required>
+                    <option disabled selected hidden value="">Choose...</option>
+                    {% for b in buildings %}
+                    <option value="{{b['build_id']}}">{{b['build_name']}}</option>
+                    {% endfor %}
+                </select>
+                <span class="error" aria-live="polite"></span>
+            </div>
+
+            <div class="modal-footer">
+              <a href="floors" class="btn btn-secondary">Close</a>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{%endblock%}
+
+{% block add_script %}
+<script>
+    $(document).ready(function(){
+        console.log("window is loaded")
+        $("#add_floor_modal").modal("show")
+    })
+</script>
+{%endblock%}
